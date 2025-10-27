@@ -1,4 +1,4 @@
-# app.py  — Expense Diary (AWS/Titan-ready, Titan voliteľný), CNB TXT + Calendarific + IssueCoin
+# app.py  — Expense Diary (AWS/Claude Haiku 4.5 - ready, voliteľný Claude), CNB TXT + Calendarific + IssueCoin
 
 import os
 import json
@@ -13,7 +13,7 @@ import altair as alt
 # ---------------------------
 # Page & basic styling
 # ---------------------------
-st.set_page_config(page_title="💰 Výdavkový denník / Expense Diary (Titan-ready)", layout="wide")
+st.set_page_config(page_title="💰 Výdavkový denník / Expense Diary (Claude Haiku 4.5-ready)", layout="wide")
 st.markdown("""
 <style>
     html, body, [class*="css"] { font-size: 16px; line-height: 1.6; }
@@ -46,13 +46,13 @@ with st.sidebar:
     else:
         st.caption("Calendarific key nájdený v ENV (CALENDARIFIC_API_KEY).")
     st.markdown("---")
-    st.caption("🧠 Titan je voliteľný. Ak nie je aktivovaný v ENV, appka beží s IssueCoin hláškami.")
+    st.caption("🧠 Claude Haiku 4.5 je voliteľný. Ak nie je aktivovaný v ENV, appka beží s IssueCoin hláškami.")
 
 # Debug store
 if "DEBUG" not in st.session_state:
     st.session_state.DEBUG = {"cnb": {"ok": None, "msg": "", "ts": None},
                               "calendarific": {"ok": None, "msg": "", "ts": None},
-                              "titan": {"ok": None, "msg": "", "ts": None, "last_hint": None}}
+                              "Claude Haiku 4.5": {"ok": None, "msg": "", "ts": None, "last_hint": None}}
 
 def _debug_set(section: str, ok: bool|None, msg: str, extra=None):
     st.session_state.DEBUG[section]["ok"] = ok
@@ -83,7 +83,7 @@ TEXTS = {
         "subtitle": ("CZK = vždy 1:1. Ostatné meny podľa denného kurzu ČNB (TXT feed). "
                      "Ak pre vybraný deň nie je kurz, použije sa posledný dostupný kurz. "
                      "Sviatky cez Calendarific (API kľúč z ENV alebo session). "
-                     "Titan hlášky sa objavia až po aktivácii."),
+                     "Claude Haiku 4.5 hlášky sa objavia až po aktivácii."),
         "date": "📅 Dátum nákupu / Datum nákupu",
         "country": "🌍 Krajina + mena / Měna",
         "amount": "💵 Suma / Částka",
@@ -101,14 +101,14 @@ TEXTS = {
         "export": "💾 Exportovať do CSV",
         "holiday_msg": "🎌 Dnes je štátny sviatok ({name}) – uži deň s rozumom!",
         "issuecoin_title": "🤖 IssueCoin hovorí",
-        "titan_off": "🧠 Titan vypnutý – používam vlastné (RAG) hlášky.",
+        "Claude Haiku 4.5_off": "🧠 Claude Haiku 4.5 vypnutý – používam vlastné (RAG) hlášky.",
     },
     "en": {
         "app_title": "💰 Expense Diary",
         "subtitle": ("CZK = always 1:1. Other currencies follow CNB daily TXT feed. "
                      "If missing for the date, the latest available rate is used. "
                      "Holidays via Calendarific (ENV or session key). "
-                     "Titan messages will appear once enabled."),
+                     "Claude Haiku 4.5 messages will appear once enabled."),
         "date": "📅 Purchase date",
         "country": "🌍 Country + currency",
         "amount": "💵 Amount",
@@ -126,7 +126,7 @@ TEXTS = {
         "export": "💾 Export CSV",
         "holiday_msg": "🎌 Today is a public holiday ({name}) – enjoy wisely!",
         "issuecoin_title": "🤖 IssueCoin says",
-        "titan_off": "🧠 Titan disabled – using built-in RAG messages.",
+        "Claude Haike 4.5_off": "🧠 Claude Haike 4.5 disabled – using built-in RAG messages.",
     }
 }
 
@@ -398,7 +398,7 @@ def holiday_message(holidays: list, lang="sk") -> str | None:
         return None
     names = [h.get("name", "") for h in holidays]
     names_lc = " | ".join(names).lower()
-    if any(k in names_lc for k in ["easter", "velikono", "veľkono"]):
+    if any(k in names_lc for k in ["easter", "velikonoce", "veľká noc"]):
         pack = SEASONAL_PACK["easter"]
         line = choice(pack["lines_sk"] if lang == "sk" else pack["lines_en"])
         return f"{pack['emoji']} {line}"
@@ -415,41 +415,58 @@ def issuecoin_block_show(d: dt_date, holidays: list, lang="sk"):
     if hm:
         st.warning(hm)
 
-# ---------------------------
-# Titan (optional; safe no-op when disabled)
-# ---------------------------
-def titan_enabled() -> bool:
-    return os.getenv("ENABLE_TITAN", "0") == "1" and bool(os.getenv("BEDROCK_REGION"))
+# ---------------------------------------------
+# Claude Haiku 4.5 (optional; safe no-op when disabled)
+# ---------------------------------------------
 
-def titan_hint(context: dict) -> str | None:
-    if not titan_enabled():
-        _debug_set("titan", None, "disabled")
+def claude_haiku_enabled() -> bool:
+    return os.getenv("ENABLE_CLAUDE_HAIKU", "0") == "1" and bool(os.getenv("BEDROCK_API_KEY"))
+
+def claude_haiku_hint(context: dict) -> str | None:
+    if not claude_haiku_enabled():
+        _debug_set("Claude Haiku 4.5", None, "disabled")
         return None
+
     try:
         import boto3
         region = os.getenv("BEDROCK_REGION")
-        model_id = os.getenv("TITAN_MODEL_ID", "amazon.titan-text-lite-v1")
+        model_id = os.getenv("CLAUDE_MODEL_ID", "anthropic.claude-3-5-haiku-20241022-v1:0")
         client = boto3.client("bedrock-runtime", region_name=region)
-        prompt = ("You are a playful finance assistant. Based on this JSON purchase context, "
-                  "return ONE short motivational/funny sentence in the same language as 'lang'. "
-                  "Keep it <140 chars.\n\n" + json.dumps(context, ensure_ascii=False))
-        body = json.dumps({
-            "inputText": prompt,
-            "textGenerationConfig": {"maxTokenCount": 80, "temperature": 0.6, "topP": 0.9}
-        })
-        resp = client.invoke_model(modelId=model_id, body=body,
-                                   accept="application/json", contentType="application/json")
-        payload = json.loads(resp.get("body").read().decode("utf-8"))
-        out = payload.get("results", [{}])[0].get("outputText", "").strip().replace("\n", " ")
-        if out:
-            _debug_set("titan", True, "OK", extra=out)
-            return out
-        _debug_set("titan", False, "empty")
-        return None
-    except Exception as e:
-        _debug_set("titan", False, f"Exception: {e}")
-        return None
 
+        user_text = (
+            "You are IssueCoin, a warm, non-judgmental finance buddy. "
+            "From this JSON purchase context, respond with ONE short, funny motivational line "
+            "in the same language as 'lang'. Keep it under 140 chars.\n\n"
+            f"{json.dumps(context, ensure_ascii=False)}"
+        )
+
+        body = json.dumps({
+            "anthropic_version": "bedrock-2023-05-31",
+            "max_tokens": 120,
+            "temperature": 0.6,
+            "top_p": 0.9,
+            "messages": [
+                {"role": "user", "content": [{"type": "text", "text": user_text}]}
+            ]
+        })
+
+        resp = client.invoke_model(
+            modelId=model_id,
+            body=body,
+            accept="application/json",
+            contentType="application/json"
+        )
+
+        payload = json.loads(resp.get("body").read().decode("utf-8"))
+        content = payload.get("content", [])
+        out = ""
+        if content and isinstance(content, list) and "text" in content[0]:
+            out = content[0]["text"].strip()
+        out = out.replace("\n", " ").strip()
+        return out if out else None
+
+    except Exception as e:
+        return None
 # ---------------------------
 # UI header
 # ---------------------------
@@ -515,15 +532,15 @@ if submit:
         # IssueCoin seasonal + holiday + general fun (always)
         issuecoin_block_show(d, hols, LANG)
 
-        # Titan hint (optional; if disabled, zobrazíme info)
+        # Claude Haiku 4.5 hint (optional; if disabled, zobrazíme info)
         ctx = {"lang": LANG, "date": d.isoformat(), "country": country, "currency": code,
                "amount": amount, "category": category, "shop": shop, "note": note,
                "converted_czk": converted}
-        hint = titan_hint(ctx)
+        hint = Claude Haiku 4.5_hint(ctx)
         if hint:
-            st.success(f"🧠 Titan: {hint}")
+            st.success(f"🧠 Claude Haiku 4.5 says: {hint}")
         else:
-            st.caption(TEXTS[LANG]["titan_off"])
+            st.caption(TEXTS[LANG]["Claude Haiku 4.5_off"])
 
 # ---------------------------
 # Table + summary
