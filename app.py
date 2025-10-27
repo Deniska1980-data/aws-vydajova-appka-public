@@ -101,7 +101,7 @@ TEXTS = {
         "export": "💾 Exportovať do CSV",
         "holiday_msg": "🎌 Dnes je štátny sviatok ({name}) – uži deň s rozumom!",
         "issuecoin_title": "🤖 IssueCoin hovorí",
-        "Claude Haiku 4.5_off": "🧠 Claude Haiku 4.5 vypnutý – používam vlastné (RAG) hlášky.",
+        "claude_haiku_off": "🧠 Claude Haiku 4.5 vypnutý – používam vlastné (RAG) hlášky.",
     },
     "en": {
         "app_title": "💰 Expense Diary",
@@ -126,7 +126,7 @@ TEXTS = {
         "export": "💾 Export CSV",
         "holiday_msg": "🎌 Today is a public holiday ({name}) – enjoy wisely!",
         "issuecoin_title": "🤖 IssueCoin says",
-        "Claude Haike 4.5_off": "🧠 Claude Haike 4.5 disabled – using built-in RAG messages.",
+        "claude_haike_off": "🧠 Claude Haike 4.5 disabled – using built-in RAG messages.",
     }
 }
 
@@ -540,7 +540,7 @@ if submit:
         if hint:
             st.success(f"🧠 Claude Haiku 4.5 says: {hint}")
         else:
-            st.caption(TEXTS[LANG]["Claude Haiku 4.5_off"])
+            st.caption(TEXTS[LANG]["claude_haiku_off"])
 
 # ---------------------------
 # Table + summary
@@ -584,6 +584,6 @@ if show_debug:
     with c1: st.markdown("**CNB TXT**"); _badge("cnb")
     with c2: st.markdown("**Calendarific**"); _badge("calendarific")
     with c3:
-        st.markdown("**Titan**"); _badge("titan")
-        last = st.session_state.DEBUG["titan"].get("last_hint")
+        st.markdown("**Claude Haiku 4.5**"); _badge("Claude Haiku")
+        last = st.session_state.DEBUG["claude_haiku"].get("last_hint")
         if last: st.code(last)
