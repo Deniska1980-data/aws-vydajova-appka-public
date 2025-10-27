@@ -536,7 +536,7 @@ if submit:
         ctx = {"lang": LANG, "date": d.isoformat(), "country": country, "currency": code,
                "amount": amount, "category": category, "shop": shop, "note": note,
                "converted_czk": converted}
-        hint = Claude Haiku 4.5_hint(ctx)
+        hint = claude_haiku_45_hint(ctx)
         if hint:
             st.success(f"🧠 Claude Haiku 4.5 says: {hint}")
         else:
