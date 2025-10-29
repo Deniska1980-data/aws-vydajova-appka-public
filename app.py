@@ -12,9 +12,7 @@ import json
 import boto3
 import streamlit as st
 
-# ------------------------------------------------------------
-# Inicializácia AWS Bedrock klienta
-# ------------------------------------------------------------
+
 def get_bedrock_client():
     try:
         client = boto3.client(
@@ -29,9 +27,6 @@ def get_bedrock_client():
         return None
 
 
-# ------------------------------------------------------------
-# Funkcia na volanie Claude Haiku 4.5 (opravená verzia)
-# ------------------------------------------------------------
 def claude_haiku_45_init(ctx):
     try:
         client = get_bedrock_client()
@@ -40,9 +35,11 @@ def claude_haiku_45_init(ctx):
 
         model_id = os.getenv("BEDROCK_MODEL_ID", "anthropic.claude-3-haiku-20240307-v1:0")
 
-        # 👇 Dôležitá zmena: používame `prompt` namiesto `inputText`
+        # 👇 dôležitá oprava: prompt musí začínať "Human:" a končiť "Assistant:"
+        prompt = f"\n\nHuman: Vytvor krátku, vtipnú a priateľskú hlášku podľa týchto údajov: {ctx}\n\nAssistant:"
+
         body = {
-            "prompt": f"Napíš krátku, priateľskú hlášku podľa týchto údajov: {ctx}",
+            "prompt": prompt,
             "max_tokens_to_sample": 200,
             "temperature": 0.7,
             "anthropic_version": "bedrock-2023-05-31"
