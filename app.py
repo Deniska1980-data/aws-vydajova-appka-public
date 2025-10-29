@@ -315,15 +315,20 @@ def calendarific_holidays(api_key: str, country_code: str, year: int, month: int
     if not api_key:
         _debug_set("calendarific", None, "No API key (ENV/session)")
         return []
-    url = ( "https://calendarific.com/api/v2/holidays"
-            f"?api_key={api_key}&country={country_code}&year={year}&month={month}&day={day}" )
+
+    url = (
+        "https://calendarific.com/api/v2/holidays"
+        f"?api_key={api_key}&country={country_code}&year={year}&month={month}&day={day}"
+    )
+
     try:
         r = requests.get(url, timeout=10)
         if r.status_code != 200:
             _debug_set("calendarific", False, f"HTTP {r.status_code}")
             return []
-    data = r.json()
-    hols = data.get("response", {}).get("holidays", [])
+
+        data = r.json()
+        hols = data.get("response", {}).get("holidays", [])
 
         # Filter out commemorative and observance days – keep only real public/national holidays
         hols = [
