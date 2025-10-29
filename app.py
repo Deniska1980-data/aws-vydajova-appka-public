@@ -12,6 +12,9 @@ import json
 import boto3
 import streamlit as st
 
+st.title("Ahoj z mojej výdavkovej appky 🚀")
+st.write("Ak toto vidíš, AWS Beanstalk beží správne!")
+
 def get_bedrock_client():
     try:
         client = boto3.client(
