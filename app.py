@@ -536,7 +536,7 @@ if submit:
         if any(k in sums.index and sums[k] > 5000 for k in ["Potraviny 🛒 / Potraviny 🛒", "Groceries 🛒"]):
             st.info("🍎 " + ("Potraviny niečo stoja – pri väčšej rodine je to prirodzené. 😉"
                              if LANG=="sk" else "Groceries are pricey – with a bigger family, that’s normal. 😉"))
-        if any(k in sums.index and sums[k] > 1000 for k in ["Zábava 🎉 / Zábava 🎉", "Entertainment 🎉"]):
+        if any(k in sums.index and sums[k] > 1500 for k in ["Zábava 🎉 / Zábava 🎉", "Entertainment 🎉"]):
             st.warning("🎉 " + ("Zábavy nikdy nie je dosť! Len pozor, aby ti ešte zostalo aj na chlebík. 😉"
                                 if LANG=="sk" else "There’s never too much fun! Just keep a little left for bread. 😉"))
         if any(k in sums.index and sums[k] > 2000 for k in ["Drogérie 🧴 / Drogérie 🧴", "Drugstore 🧴"]):
