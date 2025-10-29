@@ -325,13 +325,12 @@ def calendarific_holidays(api_key: str, country_code: str, year: int, month: int
     data = r.json()
     hols = data.get("response", {}).get("holidays", [])
 
-# Filter out commemorative and observance days — keep only real public/national holidays
-    hols = [
-        h for h in hols
-        if any(t.lower() in ["public holiday", "national holiday"] for t in h.get("type", []))
-    ]
-
-    _debug_set("calendarific", True, f"{len(hols)} holiday(s)")
+# Filter out commemorative and observance days – keep only real public/national holidays
+hols = [
+    h for h in hols
+    if any(t.lower() in ["public holiday", "national holiday"] for t in h.get("type", []))
+    and "černová" not in h.get("name", "").lower()
+]
     return hols
    
     except Exception as e:
