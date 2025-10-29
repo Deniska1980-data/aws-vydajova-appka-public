@@ -1,7 +1,5 @@
 # app.py  — Expense Diary (AWS/Claude Haiku 4.5 - ready, voliteľný Claude), CNB TXT + Calendarific + IssueCoin
 
-import os
-import json
 from datetime import datetime, date as dt_date
 from random import choice, random
 
@@ -9,28 +7,44 @@ import streamlit as st
 import pandas as pd
 import requests
 import altair as alt
+
 import boto3
+import os
+import json
 
-# Načítanie AWS a Bedrock premenných zo secrets
-aws_access_key = os.getenv("AWS_ACCESS_KEY_ID")
-aws_secret_key = os.getenv("AWS_SECRET_ACCESS_KEY")
-aws_region = os.getenv("AWS_DEFAULT_REGION")
-bedrock_model = os.getenv("BEDROCK_MODEL_ID")
+def claude_haiku_45_init(ctx):
+    """
+    Volanie AWS Bedrock – Claude Haiku 4.5
+    Generuje krátku, vtipnú alebo priateľskú hlášku podľa kontextu výdavku.
+    """
+    try:
+        bedrock = boto3.client(
+            service_name="bedrock-runtime",
+            region_name=os.getenv("AWS_DEFAULT_REGION"),
+            aws_access_key_id=os.getenv("AWS_ACCESS_KEY_ID"),
+            aws_secret_access_key=os.getenv("AWS_SECRET_ACCESS_KEY")
+        )
 
-# Inicializácia Bedrock klienta
-bedrock = boto3.client(
-    service_name="bedrock-runtime",
-    region_name=aws_region,
-    aws_access_key_id=aws_access_key,
-    
-    aws_secret_access_key=aws_secret_key
-)
+        model_id = os.getenv("BEDROCK_MODEL_ID", "anthropic.claude-3-haiku-20240307-v1:0")
 
-# Test Bedrock prepojenia
-try:
-    st.write("✅ Bedrock klient inicializovaný pre model:", bedrock_model)
-except Exception as e:
-    st.error(f"❌ Chyba pri inicializácii Bedrock klienta: {e}")
+        body = json.dumps({
+            "prompt": f"Vymysli krátku, priateľskú a vtipnú hlášku podľa týchto údajov o výdavku: {ctx}",
+            "max_tokens": 60,
+            "temperature": 0.7
+        })
+
+        response = bedrock.invoke_model(
+            modelId=model_id,
+            body=body
+        )
+
+        output = json.loads(response["body"].read())
+
+        # niektoré modely vracajú kľúč 'completion', iné 'outputText'
+        return output.get("outputText") or output.get("completion") or "Claude Haiku 4.5 nemá čo dodať 🌸"
+
+    except Exception as e:
+        return f"⚠️ Claude Haiku 4.5 sa odmlčal: {str(e)}"
 
 # ---------------------------
 # Page & basic styling
