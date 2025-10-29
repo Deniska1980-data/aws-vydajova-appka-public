@@ -12,7 +12,6 @@ import json
 import boto3
 import streamlit as st
 
-
 def get_bedrock_client():
     try:
         client = boto3.client(
@@ -26,7 +25,6 @@ def get_bedrock_client():
         st.warning(f"⚠️ Bedrock klient sa nepodarilo inicializovať: {e}")
         return None
 
-
 def claude_haiku_45_init(ctx):
     try:
         client = get_bedrock_client()
@@ -35,16 +33,17 @@ def claude_haiku_45_init(ctx):
 
         model_id = os.getenv("BEDROCK_MODEL_ID", "anthropic.claude-3-haiku-20240307-v1:0")
 
-        # 👇 Messages API formát (nový spôsob pre Claude 3)
+        # 👇 Messages API – správny formát pre Claude 3
         body = {
+            "anthropic_version": "bedrock-2023-05-31",
+            "max_tokens": 200,
+            "temperature": 0.7,
             "messages": [
                 {
                     "role": "user",
                     "content": f"Vytvor krátku, priateľskú a vtipnú hlášku podľa týchto údajov: {ctx}"
                 }
-            ],
-            "max_tokens": 200,
-            "temperature": 0.7
+            ]
         }
 
         response = client.invoke_model(
@@ -53,6 +52,8 @@ def claude_haiku_45_init(ctx):
         )
 
         result = json.loads(response["body"].read())
+
+        # 👇 Extrakcia textu z Claude odpovede
         output_text = result["content"][0]["text"]
 
         return output_text if output_text else "Claude Haiku 4.5 nevrátil žiadny text."
