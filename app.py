@@ -13,7 +13,7 @@ import boto3
 import streamlit as st
 
 # ------------------------------------------------------------
-# Inicializácia AWS Bedrock klienta pre Claude Haiku 4.5
+# Inicializácia AWS Bedrock klienta
 # ------------------------------------------------------------
 def get_bedrock_client():
     try:
@@ -28,6 +28,7 @@ def get_bedrock_client():
         st.warning(f"⚠️ Bedrock klient sa nepodarilo inicializovať: {e}")
         return None
 
+
 # ------------------------------------------------------------
 # Funkcia na volanie Claude Haiku 4.5 (opravená verzia)
 # ------------------------------------------------------------
@@ -37,26 +38,23 @@ def claude_haiku_45_init(ctx):
         if client is None:
             return "Bedrock klient nie je dostupný."
 
-        # Model ID z ENV
         model_id = os.getenv("BEDROCK_MODEL_ID", "anthropic.claude-3-haiku-20240307-v1:0")
 
-        # Vstup pre model (ako JSON)
+        # 👇 Dôležitá zmena: používame `prompt` namiesto `inputText`
         body = {
-            "inputText": f"Vygeneruj krátku, priateľskú hlášku podľa týchto údajov: {ctx}",
-            "anthropic_version": "bedrock-2023-05-31",
-            "max_tokens_to_sample": 200,  # ✅ opravené
-            "temperature": 0.7
+            "prompt": f"Napíš krátku, priateľskú hlášku podľa týchto údajov: {ctx}",
+            "max_tokens_to_sample": 200,
+            "temperature": 0.7,
+            "anthropic_version": "bedrock-2023-05-31"
         }
 
-        # Volanie modelu
         response = client.invoke_model(
             modelId=model_id,
             body=json.dumps(body)
         )
 
-        # Výstup z Claude Haiku
         result = json.loads(response["body"].read())
-        output_text = result.get("outputText", "").strip()
+        output_text = result.get("completion", "").strip()
 
         return output_text if output_text else "Claude Haiku 4.5 nevrátil žiadny text."
 
