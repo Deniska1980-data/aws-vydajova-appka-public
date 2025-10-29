@@ -3,48 +3,65 @@
 from datetime import datetime, date as dt_date
 from random import choice, random
 
-import streamlit as st
 import pandas as pd
 import requests
 import altair as alt
 
-import boto3
 import os
 import json
+import boto3
+import streamlit as st
 
-def claude_haiku_45_init(ctx):
-    """
-    Volanie AWS Bedrock – Claude Haiku 4.5
-    Generuje krátku, vtipnú alebo priateľskú hlášku podľa kontextu výdavku.
-    """
+# ------------------------------------------------------------
+# Inicializácia AWS Bedrock klienta pre Claude Haiku 4.5
+# ------------------------------------------------------------
+def get_bedrock_client():
     try:
-        bedrock = boto3.client(
-            service_name="bedrock-runtime",
-            region_name=os.getenv("AWS_DEFAULT_REGION"),
+        client = boto3.client(
+            "bedrock-runtime",
+            region_name=os.getenv("AWS_DEFAULT_REGION", "eu-central-1"),
             aws_access_key_id=os.getenv("AWS_ACCESS_KEY_ID"),
-            aws_secret_access_key=os.getenv("AWS_SECRET_ACCESS_KEY")
+            aws_secret_access_key=os.getenv("AWS_SECRET_ACCESS_KEY"),
         )
+        return client
+    except Exception as e:
+        st.warning(f"⚠️ Bedrock klient sa nepodarilo inicializovať: {e}")
+        return None
 
+# ------------------------------------------------------------
+# Funkcia na volanie Claude Haiku 4.5 (opravená verzia)
+# ------------------------------------------------------------
+def claude_haiku_45_init(ctx):
+    try:
+        client = get_bedrock_client()
+        if client is None:
+            return "Bedrock klient nie je dostupný."
+
+        # Model ID z ENV
         model_id = os.getenv("BEDROCK_MODEL_ID", "anthropic.claude-3-haiku-20240307-v1:0")
 
-        body = json.dumps({
-            "prompt": f"Vymysli krátku, priateľskú a vtipnú hlášku podľa týchto údajov o výdavku: {ctx}",
-            "max_tokens": 60,
+        # Vstup pre model (ako JSON)
+        body = {
+            "inputText": f"Vygeneruj krátku, priateľskú hlášku podľa týchto údajov: {ctx}",
+            "anthropic_version": "bedrock-2023-05-31",
+            "max_tokens_to_sample": 200,  # ✅ opravené
             "temperature": 0.7
-        })
+        }
 
-        response = bedrock.invoke_model(
+        # Volanie modelu
+        response = client.invoke_model(
             modelId=model_id,
-            body=body
+            body=json.dumps(body)
         )
 
-        output = json.loads(response["body"].read())
+        # Výstup z Claude Haiku
+        result = json.loads(response["body"].read())
+        output_text = result.get("outputText", "").strip()
 
-        # niektoré modely vracajú kľúč 'completion', iné 'outputText'
-        return output.get("outputText") or output.get("completion") or "Claude Haiku 4.5 nemá čo dodať 🌸"
+        return output_text if output_text else "Claude Haiku 4.5 nevrátil žiadny text."
 
     except Exception as e:
-        return f"⚠️ Claude Haiku 4.5 sa odmlčal: {str(e)}"
+        return f"⚠️ Claude Haiku 4.5 sa odmietol: {e}"
 
 # ---------------------------
 # Page & basic styling
