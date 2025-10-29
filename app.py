@@ -35,14 +35,16 @@ def claude_haiku_45_init(ctx):
 
         model_id = os.getenv("BEDROCK_MODEL_ID", "anthropic.claude-3-haiku-20240307-v1:0")
 
-        # 👇 dôležitá oprava: prompt musí začínať "Human:" a končiť "Assistant:"
-        prompt = f"\n\nHuman: Vytvor krátku, vtipnú a priateľskú hlášku podľa týchto údajov: {ctx}\n\nAssistant:"
-
+        # 👇 Messages API formát (nový spôsob pre Claude 3)
         body = {
-            "prompt": prompt,
-            "max_tokens_to_sample": 200,
-            "temperature": 0.7,
-            "anthropic_version": "bedrock-2023-05-31"
+            "messages": [
+                {
+                    "role": "user",
+                    "content": f"Vytvor krátku, priateľskú a vtipnú hlášku podľa týchto údajov: {ctx}"
+                }
+            ],
+            "max_tokens": 200,
+            "temperature": 0.7
         }
 
         response = client.invoke_model(
@@ -51,7 +53,7 @@ def claude_haiku_45_init(ctx):
         )
 
         result = json.loads(response["body"].read())
-        output_text = result.get("completion", "").strip()
+        output_text = result["content"][0]["text"]
 
         return output_text if output_text else "Claude Haiku 4.5 nevrátil žiadny text."
 
