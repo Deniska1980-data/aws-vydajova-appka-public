@@ -1,0 +1,30 @@
+# Ignoruj tajné súbory
+.env
+*.pem
+*.key
+
+# Python cache
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pdb
+
+# Streamlit cache
+.streamlit/
+*.log
+
+# VS Code / Dev Container
+.vscode/
+.devcontainer/
+
+# Lokálne nastavenia
+*.DS_Store
+*.idea/
+*.local/
+*.envrc
+
+# Testovacie dáta
+*.csv
+*.xlsx
+*.bak
