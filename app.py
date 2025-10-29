@@ -9,6 +9,28 @@ import streamlit as st
 import pandas as pd
 import requests
 import altair as alt
+import boto3
+
+# Načítanie AWS a Bedrock premenných zo secrets
+aws_access_key = os.getenv("AWS_ACCESS_KEY_ID")
+aws_secret_key = os.getenv("AWS_SECRET_ACCESS_KEY")
+aws_region = os.getenv("AWS_DEFAULT_REGION")
+bedrock_model = os.getenv("BEDROCK_MODEL_ID")
+
+# Inicializácia Bedrock klienta
+bedrock = boto3.client(
+    service_name="bedrock-runtime",
+    region_name=aws_region,
+    aws_access_key_id=aws_access_key,
+    
+    aws_secret_access_key=aws_secret_key
+)
+
+# Test Bedrock prepojenia
+try:
+    st.write("✅ Bedrock klient inicializovaný pre model:", bedrock_model)
+except Exception as e:
+    st.error(f"❌ Chyba pri inicializácii Bedrock klienta: {e}")
 
 # ---------------------------
 # Page & basic styling
