@@ -1,0 +1,18 @@
+{
+  "prod": {
+    "app_function": "app.app",
+    "aws_region": "eu-central-1",
+    "profile_name": "default",
+    "project_name": "vydajova-appka",
+    "runtime": "python3.11",
+    "s3_bucket": "deniska-vydajova-zappa",
+    "timeout_seconds": 60,
+    "memory_size": 512,
+    "slim_handler": true,
+    "keep_warm": false,
+    "environment_variables": {
+      "CALENDARIFIC_API_KEY": "TVOJ_API_KLUC_TU",
+      "STREAMLIT_SERVER_PORT": "8080"
+    }
+  }
+}
