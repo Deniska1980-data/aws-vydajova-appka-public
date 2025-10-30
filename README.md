@@ -24,6 +24,7 @@ It serves as a proof-of-concept for AWS AI integration and multi-cloud orchestra
 1️⃣ Clone the repo
 
 git clone https://github.com/Deniska1980-data/aws-vydajova-apka-public.git  
+
 cd aws-vydajova-apka-public
 
 2️⃣ Install dependencies
