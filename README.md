@@ -98,7 +98,9 @@ Google Cloud deployment planned for redundancy and latency improvement
 
 ---
 
-💬 *“Testovanie AWS integrácie bolo pre mňa veľmi dôležitý krok — potvrdila som si, že rozumiem cloudovým princípom nasadenia (Elastic Beanstalk, EC2, S3, VPC, porty, health checks) a viem sa rozhodnúť podľa reálnej infraštruktúrnej situácie.*”
+💬 *"Testing the AWS integration was a very important step for me — it confirmed that I understand the cloud deployment principles (Elastic Beanstalk, EC2, S3, VPC, ports, health checks) and that I can make infrastructure decisions based on real-world system behavior.*"
+
+*“Testovanie AWS integrácie bolo pre mňa veľmi dôležitý krok — potvrdila som si, že rozumiem cloudovým princípom nasadenia (Elastic Beanstalk, EC2, S3, VPC, porty, health checks) a viem sa rozhodnúť podľa reálnej infraštruktúrnej situácie.*”
 
 ## 🧾 Requirements
 
