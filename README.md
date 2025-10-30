@@ -103,8 +103,11 @@ Google Cloud deployment planned for redundancy and latency improvement
 ## 🧾 Requirements
 
 Package	Version:
+
 **Python	3.9+**
+
 **boto3	≥ 1.34**
+
 **streamlit	≥ 1.37**
 
 ## 👩‍💻 Author
