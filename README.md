@@ -19,16 +19,31 @@ The project was fully developed using **Streamlit**, containerized with **Docker
 | **Containerization**   | **Docker**                        | Used to create a consistent, portable deployment artifact for Serverless PaaS. |
 
 ## 🛡️ DevSecOps & Secrets Management
+
 A core focus was ensuring **Zero-Trust** security. All API keys and sensitive credentials are handled outside the codebase.
 
-**Zero-Trust Principle**: No sensitive data is ever stored in this public repository.
+**Zero-Trust Principle**: No sensitive data is stored in this public repository.
 
-**Secrets Manager**: AWS Access Keys (for Bedrock) and the Calendarific API Key are securely stored in **Google Secret Manager** and dynamically injected into the **Cloud Run** environment, adhering to **Least Privilege Access** standards.
+**Secrets Manager**: AWS Access Keys (for Bedrock) and the Calendarific API Key are securely stored in **Google Secret Manager** and dynamically injected into the Cloud Run environment.
 
-**Problem Resolution**: Successfully diagnosed and resolved critical issues related to invalid AWS security tokens (*UnrecognizedClientException*) within the production environment, proving expertise in **DevSecOps troubleshooting**.
+🛑 Root Cause Analysis & DevOps Triumphs
+The successful deployment required a deep dive into cross-platform security and environment configuration, proving advanced troubleshooting skills.
+
+## 🛑 Root Cause Analysis & DevOps Triumphs
+
+The successful deployment required a deep dive into cross-platform security and environment configuration, proving advanced troubleshooting skills.
+
+| Issue Type                | Symptom/Error Message                    | Root Cause Analysis (RCA)                     | Resolution & Skill Demonstrated 
+
+| **Authentication** | `UnrecognizedClientException` | AWS kľúče uložené v Google Secret Manageri boli poškodené (obsahovali úvodzovky/neviditeľné znaky). | 
+**DevSecOps:** Vytvorenie a injektovanie **čistých hodnôt**, zabezpečenie integrity dát. |
+| **GCP Permission** | `Permission denied on secret` | Servisnému účtu Cloud Run chýbala nevyhnutná IAM rola **`Secret Manager Secret Accessor`** na čítanie tajomstiev. | **IAM & Least Privilege:** Udelenie špecifickej IAM roly, vyriešenie bezpečnostného bloku na strane GCP. |
+| **Environment Config** | `Unable to locate credentials` | Kód aplikácie očakával premennú **`AWS_DEFAULT_REGION`**, zatiaľ čo prostredie poskytovalo len `AWS_REGION`. | **Troubleshooting:** Zarovnanie názvu premennej v Cloud Run tak, aby **presne zodpovedal kódu**, dosiahnutie úspešnej komunikácie. |
 
 ## ☁️ Production Deployment: DevOps Workflow (CI/CD)
-My role in this project centered on **DevOps Engineering**, transforming code into a scalable, serverless service:
+The successful production deployment was finalized using the following command in Google Cloud Shell:
+
+gcloud run deploy vydajova-appka-gcp --source . --region europe-west1
 
 **CI/CD Pipeline**: An automated workflow (triggered via git push from Google Cloud Shell) manages the entire process.
 
@@ -59,6 +74,9 @@ gcloud run deploy [SERVICE-NAME] --source . --region europe-west1
 **Final Decision: Migrate to Google Cloud Run**.
 
 *💬 "Testing the AWS integration was a critical step. It confirmed my understanding of core cloud deployment principles (Elastic Beanstalk, EC2, S3, VPC, health checks) and my ability to **make strategic infrastructure decisions** based on real-world system behavior to ensure public service reliability."*
+
+## 🌍 Application Status
+The application is now fully stable and serving requests, proving the viability of the multi-cloud architecture.
 
 👩‍💻 Author
 **Denisa Pitnerová** | Developer & Cloud Automation Enthusiast
