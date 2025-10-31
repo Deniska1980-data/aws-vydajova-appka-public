@@ -11,6 +11,7 @@ import os
 import json
 import boto3
 import streamlit as st
+from typing import Union
 
 st.title("Ahoj z mojej výdavkovej appky 🚀")
 st.write("Ak toto vidíš, AWS Beanstalk beží správne!")
