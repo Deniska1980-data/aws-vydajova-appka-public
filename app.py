@@ -112,7 +112,7 @@ def _debug_set(section: str, ok: bool|None, msg: str, extra=None):
     st.session_state.DEBUG[section]["ok"] = ok
     st.session_state.DEBUG[section]["msg"] = msg
     st.session_state.DEBUG[section]["ts"] = datetime.now().strftime("%H:%M:%S")
-    if section == "titan" and extra is not None:
+    if section == "Claude Haiku 4.5" and extra is not None:
         st.session_state.DEBUG[section]["last_hint"] = extra
 
 # ---------------------------
