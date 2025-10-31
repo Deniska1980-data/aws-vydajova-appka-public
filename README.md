@@ -10,10 +10,13 @@ The project was fully developed using **Streamlit**, containerized with **Docker
 
 | Category                   | Feature                                     | Description |
 
-| **Multi-Cloud AI**   | **Claude Haiku 4.5 (Bedrock)**    | AI text generation for smart expense insights, called directly from the GCP environment. |
-| **Data & Logic**     | **CNB & Calendarific APIs**       | External APIs for real-time currency exchange rates and holiday context. |
-| **Frontend**         | **Streamlit UI**                  | Lightweight, fully functional bilingual (SK/CZ/EN) web interface. |
-| **Containerization** | **Docker**                        | Used to create a consistent, portable deployment artifact for Serverless PaaS. |
+| **Multi-Cloud AI**     | **Claude Haiku 4.5 (Bedrock)**    | AI text generation for smart expense insights, called directly from the GCP environment. |
+
+| **Data & Logic**       | **CNB & Calendarific APIs**       | External APIs for real-time currency exchange rates and holiday context. |
+
+| **Frontend**           | **Streamlit UI**                  | Lightweight, fully functional bilingual (SK/CZ/EN) web interface. |
+
+| **Containerization**   | **Docker**                        | Used to create a consistent, portable deployment artifact for Serverless PaaS. |
 
 ## 🛡️ DevSecOps & Secrets Management
 A core focus was ensuring **Zero-Trust** security. All API keys and sensitive credentials are handled outside the codebase.
