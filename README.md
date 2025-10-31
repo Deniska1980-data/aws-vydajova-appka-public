@@ -1,119 +1,58 @@
-# 🪙 AWS Výdajová apka (Public Version)
+## ☁️ AWS Expense App (Public Version)
+**Full-Stack DevOps & Multicloud AI Agent**
 
-This repository contains the public version of my **Expense Tracking App** connected to Amazon AWS Bedrock using the **Claude Haiku 4.5 model** and a **Streamlit interface**.
-It serves as a proof-of-concept for AWS AI integration and multi-cloud orchestration within the byDeny Automation Framework.
+This repository contains the public version of my **Expense Tracking App**. Its primary goal is to demonstrate **Multi-Cloud Orchestration** the application is hosted on **Google Cloud** and calls **Amazon AWS Bedrock** for AI logic powered by the **Claude Haiku 4.5** model.
 
----
+The project was fully developed using **Streamlit**, containerized with **Docker**, and deployed to production via **Google Cloud Run**, showcasing an end-to-end cloud automation workflow.
 
-## 🚀 Features
-
-🤖 **Claude Haiku 4.5 (Bedrock)** — AI text generation for smart expense insights
-
-☁️ **AWS Integration Demo** — uses Bedrock + boto3 SDK + **optional S3 storage**
-
-💬 **Streamlit UI** — lightweight, accessible web interface for expense input
-
-🔒 **Secrets managed via Streamlit Secrets / AWS Secrets Manager**
-
-🧱 Ready for connection with the **full multi-agent Expense Tracker ecosystem**
-
----
-
-## 🧠 Run locally
-
-1️⃣ Clone the repo
-
-git clone https://github.com/Deniska1980-data/aws-vydajova-apka-public.git  
-
-cd aws-vydajova-apka-public
-
-2️⃣ Install dependencies
-
-pip install -r requirements.txt
-
-3️⃣ Configure AWS (first time only)
-
-aws configure
-
-> Enter your Access Key, Secret Key, and Region (recommended: eu-central-1).
-
-4️⃣ Run the app
-
-streamlit run app.py
-
-## ☁️ AWS Bedrock Setup
-
-This app connects to the **Claude Haiku 4.5 Express v1** model via AWS Bedrock:
-
-BEDROCK_MODEL_ID = "anthropic.claude-3-haiku-20240307-v1:0"
-BEDROCK_REGION = "eu-central-1"
-
-✅ Ensure **Bedrock is enabled** in your AWS account before running the app.
-For testing purposes, you can disable Bedrock and use dummy text generation.
-
-## 🔐 Security Note
-
-All API keys and credentials are **stored securely** in Streamlit Secrets or AWS Secrets Manager.
-No sensitive data is ever included in this public repository.
-This follows **DevSecOps** and **Least Privilege Access** principles.
-
-## 🧾 Architecture Decision Record (ADR)
-
-**Decision**: Migrate deployment from AWS Elastic Beanstalk → Streamlit Cloud (Google Cloud integration planned)
-
-## 🧠 Context
-
-During testing, the app was initially deployed on AWS Elastic Beanstalk via CloudShell (EU-Central-1).
-Deployment succeeded, but the external access endpoint returned 502 Bad Gateway and ERR_CONNECTION_TIMEOUT.
-Logs confirmed that the instance was healthy internally (status: Ready),
-but public access was blocked due to VPC-only networking and Elastic Load Balancer restrictions.
-
-## ⚙️ Alternatives considered
-
-**Option	Description	Status**
-
-AWS Elastic Beanstalk	Works internally, no external access	❌ Not compatible with Streamlit
-Microsoft Azure App Service	Stable, but slower startup for Streamlit	🟡 Secondary option
-Google Cloud Run	Public endpoints, auto-scaling, supports Streamlit	✅ Chosen
-Streamlit Cloud	Simple, stable for small AI prototypes	✅ Used for current public version
+## 🚀 Key Features & Architectural Highlights
 
 
-## ✅ Decision
+| Category                   | Feature                                     | Description |
 
-Migrate to Streamlit Cloud (public) with Google Cloud backup deployment planned for higher stability.
-All AWS-specific secrets remain safely stored in Streamlit Secrets Manager.
-The Claude Haiku 4.5 model (via AWS Bedrock) continues to be used for AI logic.
+| **Multi-Cloud AI**   | **Claude Haiku 4.5 (Bedrock)**    | AI text generation for smart expense insights, called directly from the GCP environment. |
+| **Data & Logic**     | **CNB & Calendarific APIs**       | External APIs for real-time currency exchange rates and holiday context. |
+| **Frontend**         | **Streamlit UI**                  | Lightweight, fully functional bilingual (SK/CZ/EN) web interface. |
+| **Containerization** | **Docker**                        | Used to create a consistent, portable deployment artifact for Serverless PaaS. |
 
-## 🚀 Result
+## 🛡️ DevSecOps & Secrets Management
+A core focus was ensuring **Zero-Trust** security. All API keys and sensitive credentials are handled outside the codebase.
 
-Streamlit UI fully operational
+**Zero-Trust Principle**: No sensitive data is ever stored in this public repository.
 
-Claude Haiku responses verified (CZ/SK/EN)
+**Secrets Manager**: AWS Access Keys (for Bedrock) and the Calendarific API Key are securely stored in **Google Secret Manager** and dynamically injected into the **Cloud Run** environment, adhering to **Least Privilege Access** standards.
 
-CNB & Calendarific APIs active
+**Problem Resolution**: Successfully diagnosed and resolved critical issues related to invalid AWS security tokens (*UnrecognizedClientException*) within the production environment, proving expertise in **DevSecOps troubleshooting**.
 
-Secure API key handling via Streamlit Secrets
+## ☁️ Production Deployment: DevOps Workflow (CI/CD)
+My role in this project centered on **DevOps Engineering**, transforming code into a scalable, serverless service:
 
-Google Cloud deployment planned for redundancy and latency improvement
+**CI/CD Pipeline**: An automated workflow (triggered via git push from Google Cloud Shell) manages the entire process.
 
----
+**Cloud Build**: The *Dockerfile* is used by Cloud Build to assemble the container image.
 
-💬 *"Testing the AWS integration was a very important step for me — it confirmed that I understand the cloud deployment principles (Elastic Beanstalk, EC2, S3, VPC, ports, health checks) and that I can make infrastructure decisions based on real-world system behavior.*"
+**Deployment (Cloud Run)**: The container is deployed to **Google Cloud Run**. This serverless approach handles automatic scaling (down to zero when inactive), minimizing operational overhead.
 
-*“Testovanie AWS integrácie bolo pre mňa veľmi dôležitý krok — potvrdila som si, že rozumiem cloudovým princípom nasadenia (Elastic Beanstalk, EC2, S3, VPC, porty, health checks) a viem sa rozhodnúť podľa reálnej infraštruktúrnej situácie.*”
+## ⚙️ Deployment Commands
+The successful production deployment was finalized using the following commands in Google Cloud Shell:
 
-## 🧾 Requirements
+# 1. Finalize and push code changes
+git add . && git commit -m "✨ FINAL: Include Dockerfile and final EB configuration."
+git push
 
-Package	Version:
+# 2. Deployment command (triggers Cloud Build/Run pipeline)
+gcloud run deploy [SERVICE-NAME] --source . --region europe-west1
 
-**Python	3.9+**
+## 🧠 Architecture Decision Record (ADR)
+**Initial Vision**: Deploy on AWS Elastic Beanstalk (EB).
 
-**boto3	≥ 1.34**
+**Real-World Finding**: Deployment to EB was technically successful but failed to provide public access (502 Bad Gateway / Connection Timeout) due to strict **VPC-only networking and ELB restrictions** on the underlying infrastructure.
 
-**streamlit	≥ 1.37**
+**Final Decision: Migrate to Google Cloud Run**.
 
-## 👩‍💻 Author
+*💬 "Testing the AWS integration was a critical step. It confirmed my understanding of core cloud deployment principles (Elastic Beanstalk, EC2, S3, VPC, health checks) and my ability to **make strategic infrastructure decisions** based on real-world system behavior to ensure public service reliability."*
 
-**Denisa Pitnerová**
-Developer & Cloud Automation Enthusiast
-Public version created for AWS + AI integration testing — 10/2025
+👩‍💻 Author
+**Denisa Pitnerová** | Developer & Cloud Automation Enthusiast
+
+Project Version: Finalized Multi-Cloud Deployment and Integration Test (10/2025) Repo: [Your GitHub Link]
