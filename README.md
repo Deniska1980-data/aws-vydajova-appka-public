@@ -26,9 +26,6 @@ A core focus was ensuring **Zero-Trust** security. All API keys and sensitive cr
 
 **Secrets Manager**: AWS Access Keys (for Bedrock) and the Calendarific API Key are securely stored in **Google Secret Manager** and dynamically injected into the Cloud Run environment.
 
-🛑 Root Cause Analysis & DevOps Triumphs
-The successful deployment required a deep dive into cross-platform security and environment configuration, proving advanced troubleshooting skills.
-
 ## 🛑 Root Cause Analysis & DevOps Triumphs
 
 The successful deployment required a deep dive into cross-platform security and environment configuration, proving advanced troubleshooting skills.
@@ -50,6 +47,10 @@ gcloud run deploy vydajova-appka-gcp --source . --region europe-west1
 **Cloud Build**: The *Dockerfile* is used by Cloud Build to assemble the container image.
 
 **Deployment (Cloud Run)**: The container is deployed to **Google Cloud Run**. This serverless approach handles automatic scaling (down to zero when inactive), minimizing operational overhead.
+
+![cloud_Shell](https://github.com/user-attachments/assets/215cd92f-520f-4e8e-9906-731b526c518e)
+
+![picture_Claude_Haike](https://github.com/user-attachments/assets/168b0c5d-e2ad-4d43-95aa-b7af354d5de4)
 
 ## ⚙️ Deployment Commands
 The successful production deployment was finalized using the following commands in Google Cloud Shell:
