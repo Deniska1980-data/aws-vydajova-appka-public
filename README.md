@@ -48,7 +48,9 @@ gcloud run deploy vydajova-appka-gcp --source . --region europe-west1
 
 **Deployment (Cloud Run)**: The container is deployed to **Google Cloud Run**. This serverless approach handles automatic scaling (down to zero when inactive), minimizing operational overhead.
 
-![cloud_Shell](https://github.com/user-attachments/assets/215cd92f-520f-4e8e-9906-731b526c518e)
+![google_shell_picture](https://github.com/user-attachments/assets/fc9f2960-2515-4a1d-9faa-0bef507d2050)
+
+![dockerfille](https://github.com/user-attachments/assets/cfb37cad-91f1-4458-bc01-64cc72d1c35b)
 
 ![picture_Claude_Haike](https://github.com/user-attachments/assets/168b0c5d-e2ad-4d43-95aa-b7af354d5de4)
 
