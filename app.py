@@ -462,7 +462,7 @@ def seasonal_message(d: dt_date, lang="sk") -> str:
     line = choice(pack["lines_sk"] if lang == "sk" else pack["lines_en"])
     return f"{pack['emoji']} {line}"
 
-def holiday_message(holidays: list, lang="sk") -> str | None:
+def holiday_message(holidays: list, lang="sk") -> Union[str, None]:
     if not holidays:
         return None
     names = [h.get("name", "") for h in holidays]
@@ -491,7 +491,7 @@ def issuecoin_block_show(d: dt_date, holidays: list, lang="sk"):
 def claude_haiku_enabled() -> bool:
     return os.getenv("ENABLE_CLAUDE_HAIKU", "0") == "1" and bool(os.getenv("BEDROCK_API_KEY"))
 
-def claude_haiku_hint(context: dict) -> str | None:
+def claude_haiku_hint(context: dict) -> Union[str, None]:
     if not claude_haiku_enabled():
         _debug_set("Claude Haiku 4.5", None, "disabled")
         return None
