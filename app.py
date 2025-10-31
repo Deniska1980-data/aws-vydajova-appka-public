@@ -108,7 +108,7 @@ if "DEBUG" not in st.session_state:
                               "calendarific": {"ok": None, "msg": "", "ts": None},
                               "Claude Haiku 4.5": {"ok": None, "msg": "", "ts": None, "last_hint": None}}
 
-def _debug_set(section: str, ok: bool|None, msg: str, extra=None):
+def _debug_set(section: str, ok: Union[bool, None], msg: str, extra=None):
     st.session_state.DEBUG[section]["ok"] = ok
     st.session_state.DEBUG[section]["msg"] = msg
     st.session_state.DEBUG[section]["ts"] = datetime.now().strftime("%H:%M:%S")
