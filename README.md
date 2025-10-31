@@ -40,7 +40,10 @@ My role in this project centered on **DevOps Engineering**, transforming code in
 The successful production deployment was finalized using the following commands in Google Cloud Shell:
 
 **1. Finalize and push code changes**
-git add . && git commit -m "✨ FINAL: Include Dockerfile and final EB configuration."
+git add . 
+
+git commit -m "✨ FINAL DEVOPS SUCCESS: Resolved AWS authentication and IAM permissions across GCP/AWS for stable multi-cloud operation."
+
 git push
 
 **2. Deployment command (triggers Cloud Build/Run pipeline)**
