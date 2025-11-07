@@ -5,6 +5,9 @@ This repository contains the public version of my **Expense Tracking App**. Its 
 
 The project was fully developed using **Streamlit**, containerized with **Docker**, and deployed to production via **Google Cloud Run**, showcasing an end-to-end secure cloud automation workflow.
 
+## App with Claude Haiku run: https://vydajova-appka-gcp-84817292369.europe-west1.run.app
+
+
 ## 🚀 Key Features & Architectural Highlights
 
 
