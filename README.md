@@ -1,5 +1,4 @@
-## ☁️ AWS Expense App (Public Version)
-**Full-Stack DevOps & Multicloud AI Agent**
+## ☁️ AWS Expense App (Public Version) - Full-Stack DevOps & Multicloud AI Agent**
 
 This repository contains the public version of my **Expense Tracking App**. Its primary goal is to demonstrate **Multi-Cloud Orchestration** the application is hosted on **Google Cloud Run (GCP)** and securely calls **Amazon AWS Bedrock** for AI logic powered by the **Claude 3 Haiku** model.
 
