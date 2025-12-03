@@ -14,7 +14,7 @@ import streamlit as st
 from typing import Union
 
 st.title("Ahoj z mojej výdavkovej appky 🚀")
-st.write("Ak toto vidíš, AWS Beanstalk beží správne!")
+st.write("Ak toto vidíš, AWS beží správne!")
 
 def get_bedrock_client():
     try:
